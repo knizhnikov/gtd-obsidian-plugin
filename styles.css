@@ -1,0 +1,249 @@
+/* GTD Lite */
+
+.gtd-capture-input {
+	width: 100%;
+}
+
+/* ---------- Разбор входящих ---------- */
+
+.gtd-process-item {
+	font-size: var(--font-ui-large);
+	font-weight: var(--font-semibold);
+	padding: var(--size-4-3);
+	margin-bottom: var(--size-4-3);
+	background: var(--background-secondary);
+	border-radius: var(--radius-m);
+	word-break: break-word;
+}
+
+.gtd-process-group {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	margin: var(--size-4-3) 0 var(--size-4-1);
+}
+
+.gtd-process-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: var(--size-4-2);
+}
+
+.gtd-process-choice {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+	height: auto;
+	padding: var(--size-4-2) var(--size-4-3);
+	text-align: left;
+	justify-content: flex-start;
+}
+
+.gtd-process-choice > span:nth-child(2) {
+	flex: 1;
+}
+
+.gtd-process-choice-icon {
+	color: var(--interactive-accent);
+	display: flex;
+}
+
+.gtd-process-choice-label {
+	font-weight: var(--font-medium);
+}
+
+.gtd-process-choice-hint {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	white-space: normal;
+}
+
+.gtd-process-key {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-faint);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	padding: 0 var(--size-4-1);
+}
+
+.gtd-form-row {
+	margin-bottom: var(--size-4-3);
+}
+
+.gtd-form-label {
+	font-size: var(--font-ui-small);
+	color: var(--text-muted);
+	margin-bottom: var(--size-4-1);
+}
+
+.gtd-form-row input[type="text"],
+.gtd-form-row select {
+	width: 100%;
+}
+
+.gtd-chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--size-4-1);
+}
+
+.gtd-chip.is-active {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+.gtd-form-buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: var(--size-4-2);
+}
+
+/* ---------- Панель ---------- */
+
+.gtd-view {
+	padding: var(--size-4-2) !important;
+}
+
+.gtd-inbox-bar {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+	padding: var(--size-4-2);
+	margin-bottom: var(--size-4-2);
+	background: var(--background-secondary);
+	border-radius: var(--radius-m);
+}
+
+.gtd-inbox-count {
+	flex: 1;
+	color: var(--text-muted);
+}
+
+.gtd-inbox-count.is-full {
+	color: var(--text-normal);
+	font-weight: var(--font-semibold);
+}
+
+.gtd-section {
+	margin-bottom: var(--size-4-2);
+}
+
+.gtd-section-head {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-1);
+	padding: var(--size-4-1) 0;
+	font-weight: var(--font-semibold);
+	cursor: pointer;
+	user-select: none;
+}
+
+.gtd-chevron {
+	display: flex;
+	color: var(--text-faint);
+}
+
+.gtd-count {
+	margin-left: auto;
+	font-size: var(--font-ui-smaller);
+	color: var(--text-faint);
+}
+
+.gtd-context {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-accent);
+	margin: var(--size-4-2) 0 var(--size-2-1) var(--size-4-1);
+}
+
+.gtd-task {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--size-4-2);
+	padding: var(--size-2-2) var(--size-4-1);
+	border-radius: var(--radius-s);
+	cursor: pointer;
+}
+
+.gtd-task:hover,
+.gtd-project:hover {
+	background: var(--background-modifier-hover);
+}
+
+.gtd-task.is-done .gtd-task-text {
+	text-decoration: line-through;
+	color: var(--text-faint);
+}
+
+.gtd-task .task-list-item-checkbox {
+	margin-top: 3px;
+	flex-shrink: 0;
+}
+
+.gtd-task-main {
+	min-width: 0;
+	flex: 1;
+}
+
+.gtd-task-text {
+	word-break: break-word;
+}
+
+.gtd-task-meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--size-4-1);
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+}
+
+.gtd-due.is-today {
+	color: var(--text-warning);
+}
+
+.gtd-due.is-overdue {
+	color: var(--text-error);
+	font-weight: var(--font-semibold);
+}
+
+.gtd-tag-project {
+	color: var(--text-accent);
+}
+
+.gtd-project {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+	padding: var(--size-2-2) var(--size-4-1);
+	border-radius: var(--radius-s);
+	cursor: pointer;
+}
+
+.gtd-project-icon {
+	display: flex;
+	color: var(--text-faint);
+}
+
+.gtd-project.is-stalled .gtd-project-icon,
+.gtd-project.is-stalled .gtd-project-count {
+	color: var(--text-warning);
+}
+
+.gtd-project-name {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.gtd-project-count {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-faint);
+}
+
+.gtd-empty {
+	color: var(--text-faint);
+	font-size: var(--font-ui-small);
+	padding: var(--size-2-2) var(--size-4-1);
+}

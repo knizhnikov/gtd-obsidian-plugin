@@ -1,5 +1,5 @@
-import { Plugin } from "obsidian";
-import { CaptureModal } from "./capture";
+import { Notice, Plugin } from "obsidian";
+import { CaptureModal, appendToInbox } from "./capture";
 import { OnboardingModal, hasGtdData } from "./onboarding";
 import { ProcessInboxModal } from "./process-modal";
 import { DEFAULT_SETTINGS, GtdSettings, GtdSettingTab } from "./settings";
@@ -44,10 +44,29 @@ export default class GtdLitePlugin extends Plugin {
 			callback: () => this.activateView(),
 		});
 
+		// obsidian://gtd-capture — открыть окно захвата; ?text=... — сразу сохранить во входящие.
+		// Работает и когда Obsidian закрыт: ссылка запускает его. Удобно вешать на глобальную клавишу.
+		this.registerObsidianProtocolHandler("gtd-capture", async (params) => {
+			const text = params.text?.trim();
+			if (!text) return this.openCapture();
+			try {
+				await appendToInbox(this.app, this.settings.inboxPath, text);
+				new Notice(`Во входящих: ${text}`);
+			} catch (err) {
+				new Notice(`Не удалось сохранить: ${err}`);
+			}
+		});
+
 		this.addRibbonIcon("inbox", "GTD: захватить во входящие", () => this.openCapture());
 		this.addRibbonIcon("list-checks", "GTD: открыть панель", () => this.activateView());
 
 		this.addSettingTab(new GtdSettingTab(this.app, this));
+	}
+
+	/** Ссылка для захвата извне (глобальная клавиша, Быстрые команды, Raycast) */
+	captureUri(withText = false): string {
+		const vault = encodeURIComponent(this.app.vault.getName());
+		return `obsidian://gtd-capture?vault=${vault}${withText ? "&text=" : ""}`;
 	}
 
 	openOnboarding(): void {

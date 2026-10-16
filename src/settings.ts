@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting } from "obsidian";
+import { App, Notice, PluginSettingTab, Setting } from "obsidian";
 import type GtdLitePlugin from "./main";
 
 export interface GtdSettings {
@@ -66,6 +66,19 @@ export class GtdSettingTab extends PluginSettingTab {
 			.setName("Знакомство и настройка")
 			.setDesc("Пошаговый рассказ о GTD и первичная настройка: захват, зоны внимания, проекты.")
 			.addButton((b) => b.setButtonText("Запустить").onClick(() => this.plugin.openOnboarding()));
+
+		new Setting(containerEl)
+			.setName("Захват из любого места")
+			.setDesc(
+				"Ссылка открывает окно захвата, даже если Obsidian закрыт. Повесьте её на глобальную клавишу " +
+					"через «Быстрые команды» (macOS), Raycast или Alfred. С параметром &text=... мысль сохраняется сразу, без окна."
+			)
+			.addButton((b) =>
+				b.setButtonText("Скопировать ссылку").onClick(async () => {
+					await navigator.clipboard.writeText(this.plugin.captureUri());
+					new Notice("Ссылка скопирована");
+				})
+			);
 
 		text("Файл входящих", "Сюда попадает всё, что захвачено.", "inboxPath");
 		text("Файл действий", "Действия, ожидания и «когда-нибудь» вне проектов.", "actionsPath");

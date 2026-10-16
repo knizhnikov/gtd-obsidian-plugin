@@ -201,6 +201,9 @@ export class GtdView extends ItemView {
 			[`${mod}+Enter`, "в окне добавления — сохранить и записать ещё"],
 			["1–7, 0", "в окне разбора — выбор варианта, 0 — пропустить"],
 		]);
+		block("Захват из любого места", [
+			[this.plugin.captureUri(), "ссылка открывает окно захвата, даже если Obsidian закрыт. Повесь её на глобальную клавишу — инструкция в README."],
+		]);
 
 		const btn = help.createEl("button", { cls: "gtd-help-btn" });
 		setIcon(btn.createSpan({ cls: "gtd-big-btn-icon" }), "graduation-cap");

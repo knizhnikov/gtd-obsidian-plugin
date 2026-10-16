@@ -502,6 +502,7 @@
 
 .gtd-help dt {
 	color: var(--text-normal);
+	overflow-wrap: anywhere;
 	font-weight: var(--font-medium);
 	margin-top: var(--size-4-1);
 }

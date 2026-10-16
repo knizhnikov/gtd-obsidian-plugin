@@ -17,6 +17,18 @@ export async function ensureFile(app: App, path: string, initialContent: string)
 	return app.vault.create(path, initialContent);
 }
 
+export function sanitizeFileName(name: string): string {
+	return name.replace(/[\\/:*?"<>|#^[\]]/g, "").replace(/\s+/g, " ").trim();
+}
+
+/** Создаёт заметку-проект (или возвращает существующую с тем же именем) */
+export async function createProject(app: App, projectsFolder: string, rawName: string, outcome: string): Promise<TFile> {
+	const name = sanitizeFileName(rawName);
+	if (!name) throw new Error("Укажите название проекта");
+	const path = normalizePath(`${projectsFolder}/${name}.md`);
+	return ensureFile(app, path, `---\nstatus: active\n---\n# ${name}\n\n## Результат\n\n${outcome}\n\n## Действия\n`);
+}
+
 /** Дописывает строку в конец файла */
 export async function appendLine(app: App, file: TFile, line: string): Promise<void> {
 	await app.vault.process(file, (data) => {

@@ -10,6 +10,8 @@ export interface GtdSettings {
 	waitingTag: string;
 	somedayTag: string;
 	contexts: string[];
+	showHints: boolean;
+	onboarded: boolean;
 }
 
 export const DEFAULT_SETTINGS: GtdSettings = {
@@ -20,7 +22,9 @@ export const DEFAULT_SETTINGS: GtdSettings = {
 	nextTag: "#next",
 	waitingTag: "#waiting",
 	somedayTag: "#someday",
-	contexts: ["@office", "@home", "@phone", "@computer", "@errands"],
+	contexts: ["@работа", "@дом", "@семья", "@здоровье", "@финансы"],
+	showHints: true,
+	onboarded: false,
 };
 
 type TextKey = "inboxPath" | "actionsPath" | "referencePath" | "projectsFolder" | "nextTag" | "waitingTag" | "somedayTag";
@@ -48,6 +52,21 @@ export class GtdSettingTab extends PluginSettingTab {
 						})
 				);
 
+		new Setting(containerEl)
+			.setName("Показывать подсказки")
+			.setDesc("Пояснения по методологии GTD в окнах и панели. Выключите, когда освоитесь.")
+			.addToggle((t) =>
+				t.setValue(this.plugin.settings.showHints).onChange(async (value) => {
+					this.plugin.settings.showHints = value;
+					await this.plugin.saveSettings();
+				})
+			);
+
+		new Setting(containerEl)
+			.setName("Знакомство и настройка")
+			.setDesc("Пошаговый рассказ о GTD и первичная настройка: захват, зоны внимания, проекты.")
+			.addButton((b) => b.setButtonText("Запустить").onClick(() => this.plugin.openOnboarding()));
+
 		text("Файл входящих", "Сюда попадает всё, что захвачено.", "inboxPath");
 		text("Файл действий", "Действия, ожидания и «когда-нибудь» вне проектов.", "actionsPath");
 		text("Файл справочного", "Справочные материалы из входящих.", "referencePath");
@@ -57,8 +76,8 @@ export class GtdSettingTab extends PluginSettingTab {
 		text("Тег «когда-нибудь»", "", "somedayTag");
 
 		new Setting(containerEl)
-			.setName("Контексты")
-			.setDesc("Через запятую, например: @office, @home, @phone")
+			.setName("Зоны внимания")
+			.setDesc("Сферы, к которым относятся действия. Через запятую, например: @работа, @дом, @здоровье")
 			.addTextArea((t) =>
 				t.setValue(this.plugin.settings.contexts.join(", ")).onChange(async (value) => {
 					this.plugin.settings.contexts = value

@@ -1,5 +1,6 @@
 import { Plugin } from "obsidian";
 import { CaptureModal } from "./capture";
+import { OnboardingModal, hasGtdData } from "./onboarding";
 import { ProcessInboxModal } from "./process-modal";
 import { DEFAULT_SETTINGS, GtdSettings, GtdSettingTab } from "./settings";
 import { TaskIndex } from "./task-index";
@@ -14,19 +15,28 @@ export default class GtdLitePlugin extends Plugin {
 
 		this.index = new TaskIndex(this.app, () => this.settings);
 		this.index.attach((ref) => this.registerEvent(ref));
-		this.app.workspace.onLayoutReady(() => this.index.rebuild());
+		this.app.workspace.onLayoutReady(async () => {
+			await this.index.rebuild();
+			await this.maybeOnboard();
+		});
 
 		this.registerView(VIEW_TYPE_GTD, (leaf) => new GtdView(leaf, this));
 
 		this.addCommand({
 			id: "capture",
 			name: "Захватить во входящие",
+			hotkeys: [{ modifiers: ["Mod", "Shift"], key: "A" }],
 			callback: () => this.openCapture(),
 		});
 		this.addCommand({
 			id: "process-inbox",
 			name: "Разобрать входящие",
 			callback: () => new ProcessInboxModal(this).open(),
+		});
+		this.addCommand({
+			id: "onboarding",
+			name: "Знакомство и настройка",
+			callback: () => this.openOnboarding(),
 		});
 		this.addCommand({
 			id: "open-view",
@@ -40,8 +50,23 @@ export default class GtdLitePlugin extends Plugin {
 		this.addSettingTab(new GtdSettingTab(this.app, this));
 	}
 
+	openOnboarding(): void {
+		new OnboardingModal(this).open();
+	}
+
+	/** Первый запуск: новичку — знакомство, тому, у кого данные уже есть, — просто отметка */
+	private async maybeOnboard(): Promise<void> {
+		if (this.settings.onboarded) return;
+		if (hasGtdData(this)) {
+			this.settings.onboarded = true;
+			await this.saveSettings();
+			return;
+		}
+		this.openOnboarding();
+	}
+
 	openCapture(): void {
-		new CaptureModal(this.app, this.settings.inboxPath).open();
+		new CaptureModal(this.app, this.settings.inboxPath, this.settings.showHints).open();
 	}
 
 	async activateView(): Promise<void> {

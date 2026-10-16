@@ -16,13 +16,15 @@ export interface Task {
 	contexts: string[];
 	/** YYYY-MM-DD */
 	due: string | null;
+	/** Дата выполнения (✅ YYYY-MM-DD), YYYY-MM-DD */
+	doneDate: string | null;
 	/** Имя проекта, если задача лежит в заметке-проекте */
 	project: string | null;
 }
 
 export const TASK_RE = /^(\s*[-*+] )\[(.)\] (.*)$/;
 const DUE_RE = /📅\s*(\d{4}-\d{2}-\d{2})/u;
-const DONE_RE = /✅\s*\d{4}-\d{2}-\d{2}/u;
+const DONE_RE = /✅\s*(\d{4}-\d{2}-\d{2})/u;
 const CONTEXT_RE = /(?:^|\s)(@[\p{L}\p{N}_\-/.]+)/gu;
 
 export function today(): string {
@@ -56,6 +58,7 @@ export function parseLine(raw: string, file: TFile, line: number, settings: GtdS
 		status,
 		contexts: Array.from(text.matchAll(CONTEXT_RE), (c) => c[1]),
 		due: text.match(DUE_RE)?.[1] ?? null,
+		doneDate: text.match(DONE_RE)?.[1] ?? null,
 		project,
 	};
 }
@@ -74,6 +77,13 @@ export function displayText(task: Task, settings: GtdSettings): string {
 		.replace(/\[\[([^\]]+)\]\]/g, "$1")
 		.replace(/\s+/g, " ")
 		.trim();
+}
+
+/** «работа» → «@работа», пробелы → «_» */
+export function normalizeContext(raw: string): string {
+	const c = raw.trim().replace(/\s+/g, "_");
+	if (!c || c === "@") return "";
+	return c.startsWith("@") ? c : "@" + c;
 }
 
 /** Собирает строку задачи в формате, совместимом с плагином Tasks */

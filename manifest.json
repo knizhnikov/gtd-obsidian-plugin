@@ -1,7 +1,7 @@
 {
   "id": "gtd-lite",
   "name": "GTD Lite",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "minAppVersion": "1.5.0",
   "description": "Лёгкий GTD: быстрый захват, разбор входящих, списки по контекстам, еженедельный обзор.",
   "author": "Vasiliy Knizhnikov",

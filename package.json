@@ -1,6 +1,6 @@
 {
   "name": "gtd-lite",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Лёгкий GTD для Obsidian: захват, разбор входящих, списки по контекстам, еженедельный обзор.",
   "main": "main.js",
   "private": true,
